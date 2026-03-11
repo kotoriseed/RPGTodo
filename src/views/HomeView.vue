@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useTaskStore, useCharacterStore } from '@/stores'
 import type { CreateTaskDTO, Task } from '@/types'
+import { generateItemDrops } from '@/services/rewardService'
 import PixelButton from '@/components/common/PixelButton.vue'
 import PixelModal from '@/components/common/PixelModal.vue'
 import PixelCard from '@/components/common/PixelCard.vue'
@@ -66,9 +67,13 @@ function closeDetailModal() {
 }
 
 function handleComplete(taskId: string) {
+  const task = taskStore.getTaskById(taskId)
+  if (!task) return
+  
   const reward = taskStore.completeTask(taskId)
   if (reward) {
-    characterStore.addReward(reward.experience, reward.gold)
+    const items = generateItemDrops(task.difficulty)
+    characterStore.addReward(reward.experience, reward.gold, items)
     characterStore.updateStreak(true)
   }
   closeDetailModal()
