@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import CharacterView from '@/views/CharacterView.vue'
 import BossView from '@/views/BossView.vue'
 import SettingsView from '@/views/SettingsView.vue'
+import ShopView from '@/views/ShopView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,6 +18,12 @@ const routes: RouteRecordRaw[] = [
     name: 'character',
     component: CharacterView,
     meta: { title: '角色信息' }
+  },
+  {
+    path: '/shop',
+    name: 'shop',
+    component: ShopView,
+    meta: { title: '商店' }
   },
   {
     path: '/boss',

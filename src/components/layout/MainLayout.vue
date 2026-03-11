@@ -12,12 +12,17 @@ const currentRoute = computed(() => route.name as string)
 const menuItems = [
   { name: 'home', label: '任务面板', icon: '⚔' },
   { name: 'character', label: '角色', icon: '👤' },
+  { name: 'shop', label: '商店', icon: '🏪' },
   { name: 'boss', label: 'Boss战', icon: '🐉' },
   { name: 'settings', label: '设置', icon: '⚙' }
 ]
 
 function goToCharacter() {
   router.push({ name: 'character' })
+}
+
+function goToShop() {
+  router.push({ name: 'shop' })
 }
 </script>
 
@@ -33,7 +38,7 @@ function goToCharacter() {
           <span class="stat-icon">👤</span>
           <span class="stat-value">Lv.{{ characterStore.level }}</span>
         </div>
-        <div class="stat-item stat-item--clickable" @click="goToCharacter">
+        <div class="stat-item stat-item--clickable" @click="goToShop">
           <span class="stat-icon">💰</span>
           <span class="stat-value">{{ characterStore.gold }}</span>
         </div>

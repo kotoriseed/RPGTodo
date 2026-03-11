@@ -10,6 +10,9 @@ export default defineConfig({
     }
   },
   server: {
-    allowedHosts: ['.monkeycode-ai.online']
+    allowedHosts: ['.monkeycode-ai.online'],
+    ssr: {
+      noExternal: true
+    }
   }
 })

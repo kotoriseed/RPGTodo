@@ -4,6 +4,7 @@ export interface AppData {
   tasks: unknown[]
   character: unknown
   settings: unknown
+  shop: unknown[]
   exportedAt: string
   version: string
 }
@@ -50,6 +51,7 @@ export function exportAllData(): AppData {
     tasks: loadData('tasks', []),
     character: loadData('character', null),
     settings: loadData('settings', {}),
+    shop: loadData('shop', []),
     exportedAt: new Date().toISOString(),
     version: '1.0.0'
   }
