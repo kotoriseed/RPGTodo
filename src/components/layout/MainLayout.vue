@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCharacterStore } from '@/stores'
 
 const route = useRoute()
+const router = useRouter()
 const characterStore = useCharacterStore()
 
 const currentRoute = computed(() => route.name as string)
@@ -11,9 +12,18 @@ const currentRoute = computed(() => route.name as string)
 const menuItems = [
   { name: 'home', label: '任务面板', icon: '⚔' },
   { name: 'character', label: '角色', icon: '👤' },
+  { name: 'shop', label: '商店', icon: '🏪' },
   { name: 'boss', label: 'Boss战', icon: '🐉' },
   { name: 'settings', label: '设置', icon: '⚙' }
 ]
+
+function goToCharacter() {
+  router.push({ name: 'character' })
+}
+
+function goToShop() {
+  router.push({ name: 'shop' })
+}
 </script>
 
 <template>
@@ -24,11 +34,11 @@ const menuItems = [
         <span class="logo-text">RPG Todo</span>
       </div>
       <div class="header__stats">
-        <div class="stat-item">
+        <div class="stat-item stat-item--clickable" @click="goToCharacter">
           <span class="stat-icon">👤</span>
           <span class="stat-value">Lv.{{ characterStore.level }}</span>
         </div>
-        <div class="stat-item">
+        <div class="stat-item stat-item--clickable" @click="goToShop">
           <span class="stat-icon">💰</span>
           <span class="stat-value">{{ characterStore.gold }}</span>
         </div>
@@ -100,6 +110,17 @@ const menuItems = [
   padding: 8px 16px;
   background-color: var(--color-bg);
   border: 2px solid var(--color-text);
+}
+
+.stat-item--clickable {
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.stat-item--clickable:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-primary);
+  transform: translate(-2px, -2px);
 }
 
 .stat-icon {

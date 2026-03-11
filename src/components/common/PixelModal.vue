@@ -8,7 +8,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
+  'update:show': [value: boolean]
 }>()
+
+function handleClose() {
+  emit('close')
+  emit('update:show', false)
+}
 
 watch(() => props.show, (show) => {
   if (show) {
@@ -22,11 +28,11 @@ watch(() => props.show, (show) => {
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="show" class="pixel-modal-overlay" @click.self="emit('close')">
+      <div v-if="show" class="pixel-modal-overlay" @click.self="handleClose">
         <div class="pixel-modal">
           <div class="pixel-modal__header">
             <h3 class="pixel-modal__title">{{ title }}</h3>
-            <button class="pixel-modal__close" @click="emit('close')">×</button>
+            <button class="pixel-modal__close" @click="handleClose">×</button>
           </div>
           <div class="pixel-modal__body">
             <slot />
@@ -97,6 +103,11 @@ watch(() => props.show, (show) => {
   cursor: pointer;
   padding: 0;
   line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pixel-modal__close:hover {
