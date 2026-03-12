@@ -25,7 +25,7 @@ const parentTaskId = ref<string | null>(null)
 const filter = ref<'all' | 'pending' | 'completed'>('pending')
 
 const filteredTasks = computed(() => {
-  const tasks = taskStore.rootTasks
+  const tasks = taskStore.tasks
   if (filter.value === 'pending') {
     return tasks.filter(t => t.status === 'pending' || t.status === 'in_progress')
   }
@@ -126,14 +126,18 @@ function closeSubtaskModal() {
 function handleCreateSubtask(data: CreateTaskDTO) {
   if (parentTaskId.value) {
     taskStore.createTask({ ...data, parentTaskId: parentTaskId.value })
+    const parentId = parentTaskId.value
     closeSubtaskModal()
-    selectedTask.value = taskStore.getTaskById(parentTaskId.value) || null
-    showDetailModal.value = true
+    selectedTask.value = taskStore.getTaskById(parentId) || null
+    if (selectedTask.value) {
+      showDetailModal.value = true
+    }
   }
 }
 
 const selectedSubtasks = computed(() => {
   if (!selectedTask.value) return []
+  taskStore.tasks
   return taskStore.getSubtasks(selectedTask.value.id)
 })
 </script>
