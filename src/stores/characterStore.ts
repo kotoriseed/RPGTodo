@@ -20,7 +20,8 @@ const DEFAULT_CHARACTER: Character = {
   stats: {
     totalTasksCompleted: 0,
     longestStreak: 0,
-    currentStreak: 0
+    currentStreak: 0,
+    lastCompletedDate: null as string | null
   },
   createdAt: new Date().toISOString()
 }
@@ -239,8 +240,26 @@ export const useCharacterStore = defineStore('character', () => {
   function updateStreak(completed: boolean): void {
     if (!character.value) return
 
+    const today = new Date().toDateString()
+    const lastCompletedDate = character.value.stats.lastCompletedDate
+
     if (completed) {
-      character.value.stats.currentStreak++
+      if (lastCompletedDate === today) {
+        return
+      }
+
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayStr = yesterday.toDateString()
+
+      if (lastCompletedDate === yesterdayStr) {
+        character.value.stats.currentStreak++
+      } else if (lastCompletedDate === null || lastCompletedDate !== yesterdayStr) {
+        character.value.stats.currentStreak = 1
+      }
+
+      character.value.stats.lastCompletedDate = today
+
       if (character.value.stats.currentStreak > character.value.stats.longestStreak) {
         character.value.stats.longestStreak = character.value.stats.currentStreak
       }

@@ -81,7 +81,7 @@ function handleSubmit() {
     <PixelInput
       v-model="deadline"
       label="截止日期"
-      placeholder="YYYY-MM-DD"
+      type="date"
     />
     
     <div class="task-form__actions">

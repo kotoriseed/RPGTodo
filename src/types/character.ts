@@ -16,6 +16,7 @@ export interface CharacterStats {
   totalTasksCompleted: number
   longestStreak: number
   currentStreak: number
+  lastCompletedDate: string | null
 }
 
 export interface Character {
