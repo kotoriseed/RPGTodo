@@ -5,7 +5,7 @@ const props = defineProps<{
   modelValue: string
   label?: string
   placeholder?: string
-  type?: 'text' | 'textarea'
+  type?: 'text' | 'textarea' | 'date'
   rows?: number
 }>()
 
@@ -15,7 +15,8 @@ const emit = defineEmits<{
 
 const inputClasses = computed(() => [
   'pixel-input__field',
-  props.type === 'textarea' ? 'pixel-input__field--textarea' : ''
+  props.type === 'textarea' ? 'pixel-input__field--textarea' : '',
+  props.type === 'date' ? 'pixel-input__field--date' : ''
 ])
 
 function handleInput(event: Event) {
@@ -33,6 +34,14 @@ function handleInput(event: Event) {
       :value="modelValue"
       :placeholder="placeholder"
       :rows="rows || 3"
+      @input="handleInput"
+    />
+    <input
+      v-else-if="type === 'date'"
+      type="date"
+      :class="inputClasses"
+      :value="modelValue"
+      placeholder="选择日期..."
       @input="handleInput"
     />
     <input
@@ -85,5 +94,23 @@ function handleInput(event: Event) {
 .pixel-input__field--textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+.pixel-input__field--date {
+  cursor: pointer;
+  min-height: 44px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pixel-input__field--date::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.6;
+  width: 24px;
+  height: 24px;
+  margin-left: 8px;
+  -webkit-appearance: none;
+  appearance: none;
 }
 </style>
