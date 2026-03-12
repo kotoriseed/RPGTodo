@@ -20,6 +20,7 @@ const stars = computed(() => DIFFICULTY_STARS[props.task.difficulty])
 const difficultyColor = computed(() => DIFFICULTY_COLORS[props.task.difficulty])
 const isTaskOverdue = computed(() => isOverdue(props.task.deadline))
 const daysUntil = computed(() => getDaysUntilDeadline(props.task.deadline))
+const isSubtask = computed(() => props.task.parentTaskId !== null)
 
 function renderStars(count: number, color: string): string {
   return '★'.repeat(count).split('').map(() => `<span style="color: ${color}">★</span>`).join('')
@@ -31,7 +32,8 @@ function renderStars(count: number, color: string): string {
     class="task-card"
     :class="{
       'task-card--completed': task.status === 'completed',
-      'task-card--overdue': isTaskOverdue && task.status !== 'completed'
+      'task-card--overdue': isTaskOverdue && task.status !== 'completed',
+      'task-card--subtask': isSubtask
     }"
     @click="emit('click', task.id)"
   >
@@ -39,7 +41,10 @@ function renderStars(count: number, color: string): string {
       <div class="task-difficulty" :style="{ color: difficultyColor }">
         <span v-html="renderStars(stars, difficultyColor)" />
       </div>
-      <div class="task-type">{{ TYPE_LABELS[task.type] }}</div>
+      <div class="task-type">
+        <span v-if="isSubtask" class="subtask-badge">子任务</span>
+        {{ TYPE_LABELS[task.type] }}
+      </div>
     </div>
     
     <h4 class="task-card__title">{{ task.title }}</h4>
@@ -138,6 +143,17 @@ function renderStars(count: number, color: string): string {
 
 .task-card--overdue {
   border-color: var(--color-danger);
+}
+
+.task-card--subtask {
+  margin-left: 16px;
+  border-left: 4px solid var(--color-info);
+}
+
+.subtask-badge {
+  font-size: 9px;
+  color: var(--color-info);
+  margin-right: 4px;
 }
 
 .task-card__header {

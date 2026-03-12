@@ -166,41 +166,17 @@ export const useTaskStore = defineStore('task', () => {
 
   function completeTask(id: string): Reward | null {
     const task = getTaskById(id)
-    if (!task || task.status === 'completed') return null
-
-    const subtasks = getSubtasks(id)
-    const incompleteSubtasks = subtasks.filter(s => s.status !== 'completed')
-    if (incompleteSubtasks.length > 0) return null
+    if (!task || task.status === 'completed') {
+      return null
+    }
 
     const now = new Date().toISOString()
     task.status = 'completed'
     task.completedAt = now
     task.updatedAt = now
 
-    if (task.parentTaskId) {
-      checkParentCompletion(task.parentTaskId)
-    }
-
     saveTasks()
     return task.reward
-  }
-
-  function checkParentCompletion(parentId: string): void {
-    const parent = getTaskById(parentId)
-    if (!parent) return
-
-    const subtasks = getSubtasks(parentId)
-    const allCompleted = subtasks.every(s => s.status === 'completed')
-
-    if (allCompleted && subtasks.length > 0) {
-      parent.status = 'completed'
-      parent.completedAt = new Date().toISOString()
-      parent.updatedAt = new Date().toISOString()
-
-      if (parent.parentTaskId) {
-        checkParentCompletion(parent.parentTaskId)
-      }
-    }
   }
 
   function startTask(id: string): void {

@@ -80,8 +80,19 @@ function formatDate(date: string): string {
           class="subtask-item"
           :class="{ 'subtask-item--completed': subtask.status === 'completed' }"
         >
-          <span class="subtask-status">{{ subtask.status === 'completed' ? '✓' : '○' }}</span>
-          <span class="subtask-title">{{ subtask.title }}</span>
+          <div class="subtask-left">
+            <span class="subtask-status">{{ subtask.status === 'completed' ? '✓' : '○' }}</span>
+            <span class="subtask-title">{{ subtask.title }}</span>
+            <span class="subtask-difficulty">({{ DIFFICULTY_LABELS[subtask.difficulty] }})</span>
+          </div>
+          <PixelButton
+            v-if="subtask.status !== 'completed'"
+            size="small"
+            type="success"
+            @click="emit('complete', subtask.id)"
+          >
+            完成
+          </PixelButton>
         </div>
       </div>
     </div>
@@ -236,7 +247,8 @@ function formatDate(date: string): string {
 .subtask-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
   padding: 8px;
   background-color: var(--color-bg-secondary);
   border: 2px solid var(--color-text-muted);
@@ -247,12 +259,24 @@ function formatDate(date: string): string {
   text-decoration: line-through;
 }
 
+.subtask-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
 .subtask-status {
   font-size: 14px;
 }
 
 .subtask-title {
   font-size: 12px;
+}
+
+.subtask-difficulty {
+  font-size: 11px;
+  color: var(--color-text-muted);
 }
 
 .task-detail__timestamps {
